@@ -41,16 +41,19 @@ class App extends Component<{}, IState> {
    * Get new data from server and update the state with the new data
    */
   getDataFromServer = () => {
-    // Set interval to continuously fetch data from the server
-    this.intervalId = setInterval(() => {
+    let x = 0;
+    const interval = setInterval(() => {
       DataStreamer.getData((serverResponds: ServerRespond[]) => {
-        // Update the state by creating a new array of data that consists of
-        // Previous data in the state and the new data from server
-        this.setState((prevState) => ({
-          data: [...prevState.data, ...serverResponds],
-        }));
+        this.setState({
+          data: serverResponds,
+          showGraph: true,
+        });
       });
-    }, 100); // Adjust the interval time as needed
+      x++;
+      if (x > 1000) {
+        clearInterval(interval);
+      }
+    }, 100);
   };
   /**
    * Render the App react component
